@@ -6,3 +6,9 @@ type Store struct {
 	Location string
 	Schema   string
 }
+
+type User struct {
+	Id       uint64 `gorm:"primaryKey"`
+	UserName string
+	PassWord string
+}
