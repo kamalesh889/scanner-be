@@ -8,8 +8,8 @@ import (
 func (s *server) LoginService(req *LoginReq) (*LoginResp, error) {
 
 	userReq := &model.User{
-		UserName: req.Username,
-		PassWord: req.PassWord,
+		Username: req.Username,
+		Password: req.PassWord,
 	}
 
 	user, err := s.db.GetUser(userReq)
@@ -32,6 +32,28 @@ func (s *server) LoginService(req *LoginReq) (*LoginResp, error) {
 		Token:    token.Token,
 		UserId:   user.Id,
 		UserName: req.Username,
+	}
+
+	return resp, nil
+
+}
+
+func (s *server) Createstore(req *Storedetails) (*StoreResp, error) {
+
+	store := &model.Store{
+		Name:     req.Storename,
+		Location: req.Location,
+		Schema:   req.Storename + "_schema",
+	}
+
+	store, err := s.db.CreateStore(store)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &StoreResp{
+		StoreId:   store.Id,
+		StoreName: store.Name,
 	}
 
 	return resp, nil

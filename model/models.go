@@ -9,6 +9,6 @@ type Store struct {
 
 type User struct {
 	Id       uint64 `gorm:"primaryKey"`
-	UserName string
-	PassWord string
+	Username string
+	Password string
 }
