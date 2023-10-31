@@ -1,6 +1,9 @@
 package model
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 func (r *Database) GetUser(req *User) (*User, error) {
 
@@ -32,4 +35,33 @@ func (r *Database) CreateStore(req *Store) (*Store, error) {
 	}
 
 	return req, nil
+}
+
+func (r *Database) GetStore(storeid uint64) (*Store, error) {
+
+	store := Store{}
+
+	err := r.DbConn.First(&store, "id=?", storeid).Error
+	if err != nil {
+		log.Println("Error in Fetching store details", err)
+		return nil, err
+	}
+
+	return &store, nil
+}
+
+func (r *Database) GetProduct(code string, schema string) (*Product, error) {
+
+	product := &Product{}
+
+	query := fmt.Sprintf("select * from %s.products where barcode = ?", schema)
+
+	err := r.DbConn.Raw(query, code).Scan(product).Error
+	if err != nil {
+		log.Println("Error in Fetching product details", err)
+		return nil, err
+	}
+
+	return product, nil
+
 }

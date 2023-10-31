@@ -3,6 +3,7 @@ package server
 import (
 	"barcode/model"
 	"barcode/utility"
+	"strconv"
 )
 
 func (s *server) LoginService(req *LoginReq) (*LoginResp, error) {
@@ -54,6 +55,32 @@ func (s *server) Createstore(req *Storedetails) (*StoreResp, error) {
 	resp := &StoreResp{
 		StoreId:   store.Id,
 		StoreName: store.Name,
+	}
+
+	return resp, nil
+
+}
+
+func (s *server) GetProductService(barcode string, code string) (*ProductResp, error) {
+
+	storeCode, _ := strconv.Atoi(code)
+
+	store, err := s.db.GetStore(uint64(storeCode))
+	if err != nil {
+		return nil, err
+	}
+
+	product, err := s.db.GetProduct(barcode, store.Schema)
+	if err != nil {
+		return nil, err
+	}
+
+	productPrice := product.Mrp - (product.Mrp * product.Discount)
+
+	resp := &ProductResp{
+		Name:    product.Name,
+		Price:   productPrice,
+		Barcode: barcode,
 	}
 
 	return resp, nil

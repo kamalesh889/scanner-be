@@ -20,3 +20,9 @@ type StoreResp struct {
 	StoreId   uint64 `json:"storeid"`
 	StoreName string `json:"storename"`
 }
+
+type ProductResp struct {
+	Name    string  `json:"name"`
+	Price   float64 `json:"price"`
+	Barcode string  `json:"barcode"`
+}

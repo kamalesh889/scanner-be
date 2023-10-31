@@ -3,6 +3,8 @@ package model
 import (
 	"fmt"
 	"log"
+
+	"gorm.io/gorm"
 )
 
 type Product struct {
@@ -39,6 +41,8 @@ func (r *Database) SchemaMigration(schema string) error {
 		log.Printf("Schema %s created successfully for ", schema)
 	}
 
+	// This piece of code can be more optimised
+
 	table1 := fmt.Sprintf("%s.products", schema)
 	table2 := fmt.Sprintf("%s.employees", schema)
 	table3 := fmt.Sprintf("%s.transactions", schema)
@@ -50,5 +54,12 @@ func (r *Database) SchemaMigration(schema string) error {
 	log.Printf("Tables created successfully for schema %s", schema)
 
 	return nil
+
+}
+
+func (r *Database) ConnectSchema(schema string) *gorm.DB {
+
+	session := r.DbConn.Session(&gorm.Session{}).Exec("SET search_path TO " + schema)
+	return session
 
 }
