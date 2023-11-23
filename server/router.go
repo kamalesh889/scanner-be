@@ -1,15 +1,20 @@
 package server
 
-import "github.com/gorilla/mux"
+import (
+	"barcode/utility"
+
+	"github.com/gorilla/mux"
+)
 
 func Router(s *server) *mux.Router {
 
 	r := s.router
 
 	r.HandleFunc("/login", s.Login).Methods("POST")
-	r.HandleFunc("/create/store", s.CreateStore).Methods("POST")
-
-	r.HandleFunc("/get/product/{barcode}", s.GetProduct).Methods("GET")
+	r.HandleFunc("user/{id}/create/store", utility.VerifyToken(s.CreateStore)).Methods("POST")
+	r.HandleFunc("user/{id}/get/product/{barcode}", utility.VerifyToken(s.GetProduct)).Methods("GET")
 
 	return r
 }
+
+// Store code will be provided as query param to get the schema

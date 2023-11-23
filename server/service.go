@@ -79,6 +79,7 @@ func (s *server) GetProductService(barcode string, code string) (*ProductResp, e
 
 	resp := &ProductResp{
 		Name:    product.Name,
+		Mrp:     product.Mrp,
 		Price:   productPrice,
 		Barcode: barcode,
 	}

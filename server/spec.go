@@ -23,6 +23,7 @@ type StoreResp struct {
 
 type ProductResp struct {
 	Name    string  `json:"name"`
+	Mrp     float64 `json:"mrp"`
 	Price   float64 `json:"price"`
 	Barcode string  `json:"barcode"`
 }

@@ -2,9 +2,12 @@ package utility
 
 import (
 	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/mux"
 )
 
 var secretKey = []byte("Scanning-SecretKey")
@@ -29,4 +32,42 @@ func (r *TokenReq) CreateJwtToken() (*TokenReq, error) {
 
 	return r, nil
 
+}
+
+func VerifyToken(endpoint http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id := params["id"]
+
+		userid, _ := strconv.Atoi(id)
+
+		accessToken := r.Header.Get("Authtoken")
+
+		if accessToken == "" {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		claims := jwt.MapClaims{}
+		token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+			return secretKey, nil
+		})
+
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		if !token.Valid {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		if claims["id"] != uint64(userid) {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+	})
 }
