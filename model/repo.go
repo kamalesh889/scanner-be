@@ -65,3 +65,19 @@ func (r *Database) GetProduct(code string, schema string) (*Product, error) {
 	return product, nil
 
 }
+
+func (r *Database) GetOrders(userid uint64) ([]UserOrder, error) {
+
+	orders := []UserOrder{}
+
+	query := "select * from user_order where user_id = ? limit 10"
+
+	err := r.DbConn.Raw(query, userid).Scan(orders).Error
+	if err != nil {
+		log.Println("Error in Fetching User Order details", err)
+		return nil, err
+	}
+
+	return orders, nil
+
+}

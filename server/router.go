@@ -13,6 +13,7 @@ func Router(s *server) *mux.Router {
 	r.HandleFunc("/login", s.Login).Methods("POST")
 	r.HandleFunc("user/{id}/create/store", utility.VerifyToken(s.CreateStore)).Methods("POST")
 	r.HandleFunc("user/{id}/get/product/{barcode}", utility.VerifyToken(s.GetProduct)).Methods("GET")
+	r.HandleFunc("user/{id}/orders", utility.VerifyToken(s.GetOrders)).Methods("GET")
 
 	return r
 }

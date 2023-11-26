@@ -87,3 +87,16 @@ func (s *server) GetProductService(barcode string, code string) (*ProductResp, e
 	return resp, nil
 
 }
+
+func (s *server) GetUserOrders(id string) ([]model.UserOrder, error) {
+
+	userid, _ := strconv.Atoi(id)
+
+	orders, err := s.db.GetOrders(uint64(userid))
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+
+}

@@ -26,7 +26,7 @@ func InitializeDB() (*model.Database, error) {
 func Migrate(db *gorm.DB) error {
 
 	err := db.AutoMigrate(
-		&model.Store{}, &model.User{},
+		&model.Store{}, &model.User{}, &model.UserOrder{},
 	)
 	if err != nil {
 		log.Fatalln(err)
